@@ -1,8 +1,14 @@
 
-
 def poker(hands):
-	"Return the best hand: poker([hand,...]) => hand"
-	return max(hands, key=hand_rank)
+	"Return a list of winning hands: poker([hand,...]) => [hand,...]"
+	return allmax(hands, key=hand_rank)
+
+
+def allmax(iterable, key=None):
+	"Return a list of all items equal to the max of the iterable."
+	key = key or (lambda x: x)
+	m = max(iterable, key=key)
+	return [x for x in iterable if key(x) >= key(m)]
 
 
 def hand_rank(hand):
@@ -28,20 +34,13 @@ def hand_rank(hand):
 		return (0, ranks)
 
 
-def card_ranks(cards):
+def card_ranks(hand):
 	"Returns list of ranks - [10, 9, 5, 6, 5]"
-	mapping = {'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
-	result = []
-	for card in cards:
-		r = card[0]
-		if r in mapping:
-			result += [mapping[r]]
-		else:
-			result += [int(r)]
-	result.sort(reverse=True)
-	return result
-
-# print card_ranks(['AC', '3D', '4S', 'KH', '5D'])
+	ranks = ['--23456789TJQKA'.index(r) for r, s in hand]
+	ranks.sort(reverse=True)
+	if ranks == [14, 5, 4, 3, 2]:
+		return [5, 4, 3, 2, 1]
+	return ranks
 
 
 def straight(ranks):
@@ -66,17 +65,6 @@ def kind(n, ranks):
 	Return the first rank that this hand has exactly n of.
 	Return None if there is no n-of-a-kind in the hand.
 	"""
-	# old code below:
-	# count = {}
-	# for rank in set(ranks):
-	# 	count[rank] = 0
-	# for rank in ranks:
-	# 	count[rank] += 1
-	# for rank in count:
-	# 	if count[rank] == n:
-	# 		return rank
-
-	# refactor:
 	for rank in set(ranks):
 		if ranks.count(rank) == n:
 			return rank
@@ -108,7 +96,7 @@ def test():
 	s2 = "2C 3C 4C 5S 6S".split() # 2-6 straight
 	ah = "AS 2S 3S 4S 6C".split() # A high
 	sh = "2S 3S 4S 6C 7D".split() # 7 high
-	assert poker([s1, s2, ah, sh]) == s2
+	assert poker([s1, s2, ah, sh]) == [s2]
 	fkranks = card_ranks(fk)
 	tpranks = card_ranks(tp)
 	assert kind(4, fkranks) == 9
@@ -124,14 +112,15 @@ def test():
 	assert card_ranks(sf) == [10, 9, 8, 7, 6]
 	assert card_ranks(fk) == [9, 9, 9, 9, 7]
 	assert card_ranks(fh) == [10, 10, 10, 7, 7]
-	assert poker([sf, fk, fh]) == sf
-	assert poker([fk, fh]) == fk
-	assert poker([fh, fh]) == fh
-	assert poker([fh]) == fh
-	assert poker(99*[fk]+[sf]) == sf
+	assert poker([sf, fk, fh]) == [sf]
+	assert poker([fk, fh]) == [fk]
+	assert poker([fh, fh]) == [fh, fh]
+	assert poker([fh]) == [fh]
+	assert poker(99*[fk]+[sf]) == [sf]
 	assert hand_rank(sf) == (8, 10)
 	assert hand_rank(fk) == (7, 9, 7)
 	assert hand_rank(fh) == (6, 10, 7)
 	return "tests pass"
+
 
 print test()
