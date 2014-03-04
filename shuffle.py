@@ -1,4 +1,5 @@
 import random
+from collections import defaultdict
 
 
 def shuffle(deck):
@@ -24,7 +25,7 @@ def shuffle2(deck):
     N = len(deck)
     swapped = [False] * N
     while not all(swapped):
-        i, j = randrange(N), randrange(N)
+        i, j = random.randrange(N), random.randrange(N)
         swapped[i] = True
         swap(deck, i, j)
 
@@ -33,12 +34,12 @@ def shuffle3(deck):
     "An easier modification of teacher's algorithm."
     N = len(deck)
     for i in range(N):
-        swap(deck, i, randrange(N))
+        swap(deck, i, random.randrange(N))
 
 
 def swap(deck, i, j):
     "Swap elements i and j of a collection."
-    print 'swap', i, j
+    # print 'swap', i, j
     deck[i], deck[j] = deck[j], deck[i]
 
 
@@ -59,7 +60,8 @@ def test_shuffler(shuffler, deck='abcd', n=10000):
     print
 
 
-def test_shufflers(shufflers=[shuffle, shuffle1], decks=['abc', 'ab']):
+def test_shufflers(shufflers=[shuffle, shuffle1, shuffle2, shuffle3],
+                   decks=['abc', 'ab']):
     for deck in decks:
         print
         for f in shufflers:
@@ -67,3 +69,6 @@ def test_shufflers(shufflers=[shuffle, shuffle1], decks=['abc', 'ab']):
 
 
 def factorial(n): return 1 if (n <= 1) else n * factorial(n-1)
+
+
+test_shufflers()
