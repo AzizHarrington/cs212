@@ -71,11 +71,17 @@ def faster_solve(formula):
 def compile_formula(formula, verbose=False):
     """Compile formula into a function. Also return letters found, as a str,
     in same order as parms of function. For example, 'You == ME**2' returns
-    (lambda Y, M, E, U, O: (U+10*O+100*Y) == (E+10*M)**2), 'YMEUO' """
+    (lambda Y, M, E, U, O: (U+10*O+100*Y) == (E+10*M)**2), 'YMEUO' 
+    leading zeros not allowed"""
+
     letters = ''.join(set(re.findall(['A-Z'], formula)))
+    firstletters = set(re.findall(r'\b([A-Z])[A-Z]', formula))
     parms = ', '.join(letters)
     tokens = map(compile_word, re.split('([A-Z]+)', formula))
     body = ''.join(tokens)
+    if firstletters:
+        tests = ' and '.join(L+'!=0' for L in firstletters)
+        body = '%s and (%s)' % (tests, body)
     f = 'lambda %s: %s' % (parms, body)
     if verbose: print f
     return eval(f), letters
