@@ -32,15 +32,16 @@ def longest_subpalindrome_slice(text):
 
 
 def expand_palindrome(string, text, end):
-    while i <:
-        try:
-            
-            string += text[i]
+    i = end
+    while i < len(text):
+        string += text[i]
+        print string
+        if is_palindrome(string):
             i += 1
-            print string
-        except IndexError:
+        else:
             break
-    return string, end
+    return string, i
+
 
 
 def is_palindrome(string):
@@ -60,9 +61,4 @@ def test():
     assert L('Mad am I ma dam.') == (0, 15)
     return 'tests pass'
 
-print test()
-
-# a = "123aaabbbobbbbb bbbaaappleRacecar"
-
-# print L(a)
-# print len(a)
+print expand_palindrome('racecar', 'a racecar racecar a 10', 1)
