@@ -17,18 +17,34 @@
 
 def longest_subpalindrome_slice(text):
     "Return (i, j) such that text[i:j] is the longest palindrome in text."
-    current = {'l': 0, 'points': (0, 0)}
-    length = len(text)
-    for i in range(length + 1):
-        start = current['l']
-        if i + start < length:
-            for j in range(length + 1)[start:]:
-                a = text[i:j]
-                b = a[::-1]
-                if a.upper() == b.upper() and len(a) > current['l']:
-                    current['l'] = len(a)
-                    current['points'] = (i, j)
-    return current['points']
+    longest_palindrome = {'length': 0, 'points': (0, 0)}
+    text_length = len(text)
+    for i in xrange(text_length + 1):
+        start = longest_palindrome['length'] + i
+        if start < text_length:
+            for j in xrange(start + 1, text_length + 1):
+                slc = text[i:j]
+                if is_palindrome(slc):
+                    expanded = expand_palindrome(slc, text, j)
+                    longest_palindrome['length'] = len(expanded[0])
+                    longest_palindrome['points'] = (i, expanded[1])
+    return longest_palindrome['points']
+
+
+def expand_palindrome(string, text, end):
+    while i <:
+        try:
+            
+            string += text[i]
+            i += 1
+            print string
+        except IndexError:
+            break
+    return string, end
+
+
+def is_palindrome(string):
+    return string.upper() == string.upper()[::-1]
   
 
 L = longest_subpalindrome_slice
@@ -46,6 +62,7 @@ def test():
 
 print test()
 
+# a = "123aaabbbobbbbb bbbaaappleRacecar"
 
-
-# print L('something rac e car going')
+# print L(a)
+# print len(a)
