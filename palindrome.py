@@ -26,22 +26,20 @@ def longest_subpalindrome_slice(text):
                 slc = text[i:j]
                 if is_palindrome(slc):
                     expanded = expand_palindrome(slc, text, j)
+                    print expanded
                     longest_palindrome['length'] = len(expanded[0])
                     longest_palindrome['points'] = (i, expanded[1])
     return longest_palindrome['points']
 
 
-def expand_palindrome(string, text, end):
-    i = end
-    while i < len(text):
-        string += text[i]
-        print string
-        if is_palindrome(string):
-            i += 1
-        else:
-            break
-    return string, i
-
+def expand_palindrome(string, text, string_end):
+    result = string
+    ending_pos = string_end
+    for a in text[string_end:]:
+        result += a
+        if is_palindrome(result):
+            return result, ending_pos
+    return string, string_end
 
 
 def is_palindrome(string):
@@ -61,4 +59,5 @@ def test():
     assert L('Mad am I ma dam.') == (0, 15)
     return 'tests pass'
 
-print expand_palindrome('racecar', 'a racecar racecar a 10', 1)
+
+print test()
