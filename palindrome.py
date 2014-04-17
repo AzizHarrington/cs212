@@ -25,21 +25,9 @@ def longest_subpalindrome_slice(text):
             for j in xrange(start + 1, text_length + 1):
                 slc = text[i:j]
                 if is_palindrome(slc):
-                    expanded = expand_palindrome(slc, text, j)
-                    print expanded
-                    longest_palindrome['length'] = len(expanded[0])
-                    longest_palindrome['points'] = (i, expanded[1])
+                    longest_palindrome['length'] = len(slc)
+                    longest_palindrome['points'] = (i, j)
     return longest_palindrome['points']
-
-
-def expand_palindrome(string, text, string_end):
-    result = string
-    ending_pos = string_end
-    for a in text[string_end:]:
-        result += a
-        if is_palindrome(result):
-            return result, ending_pos
-    return string, string_end
 
 
 def is_palindrome(string):
